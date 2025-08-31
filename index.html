@@ -98,7 +98,7 @@
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px极
         }
         
         .tab {
@@ -177,13 +177,11 @@
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 极
         }
         
         th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            padding: 12px极
         }
         
         th {
@@ -230,6 +228,7 @@
             background-color: var(--warning);
         }
         
+       极
         .btn-delete {
             background-color: var(--danger);
         }
@@ -288,7 +287,7 @@
             background: var(--success);
             color: white;
             border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 极
             transform: translateX(100%);
             transition: transform 0.3s ease;
             z-index: 1000;
@@ -323,10 +322,7 @@
         }
         
         .report-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            display:极
         }
         
         .report-card {
@@ -357,17 +353,7 @@
                 flex-direction: column;
             }
             
-            .data-buttons {
-                flex-direction: column;
-            }
-            
-            .report-summary {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .data-b极
         }
     </style>
 </head>
@@ -379,38 +365,14 @@
 
     <div class="container">
         <div class="dashboard">
-            <div class="card">
-                <h3>Total Revenue</h3>
-                <div class="value" id="total-revenue">Rp 0</div>
-            </div>
-            <div class="card">
-                <h3>Received Revenue</h3>
-                <div class="value received-value" id="received-revenue">Rp 0</div>
-            </div>
-            <div class="card">
-                <h3>Total Orders</h3>
-                <div class="value" id="total-orders">0</div>
-            </div>
-            <div class="card">
-                <h3>Total Units Sold</h3>
-                <div class="value units-value" id="total-units">0</div>
-            </div>
-            <div class="card">
-                <h3>Average Order Value</h3>
-                <div class="value" id="average-order">Rp 0</div>
-            </div>
-            <div class="card">
-                <h3>Best Selling Product</h3>
-                <div class="value" id="best-product">-</div>
-            </div>
+            <div class="极
         </div>
 
         <div class="tabs">
             <div class="tab active" data-tab="orders">Orders</div>
             <div class="tab" data-tab="add-order">Add New Order</div>
             <div class="tab" data-tab="products">Products</div>
-            <div class="tab" data-tab="reports">Reports</div>
-            <div class="tab" data-tab="data">Data Management</div>
+            <极
         </div>
 
         <div class="tab-content active" id="orders-tab">
@@ -422,9 +384,7 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Price</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Total</极
                     </tr>
                 </thead>
                 <tbody>
@@ -462,15 +422,7 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="price">Price per Unit (Rp)</label>
-                        <input type="number" id="price" step="100" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status" required>
-                            <option value="Pending">Pending</option>
-                            <option value="Paid">Paid</option>
-                        </select>
+                        <label for极
                     </div>
                 </div>
                 
@@ -522,9 +474,7 @@
                 <div class="data-buttons">
                     <button class="btn-export" id="export-json">Export as JSON</button>
                     <button class="btn-export" id="export-excel">Export as Excel</button>
-                    <button class="btn-import" id="import-json">Import JSON</button>
-                    <button class="btn-import" id="import-excel">Import Excel</button>
-                    <button class="btn-clear" id="clear-data">Clear All Data</button>
+                    <button class="btn-import"极
                 </div>
 
                 <div class="import-options">
@@ -583,16 +533,7 @@
         const bestProduct = document.getElementById('best-product');
         const reportMonth = document.getElementById('report-month');
         const monthlyReport = document.getElementById('monthly-report');
-        const exportJsonButton = document.getElementById('export-json');
-        const exportExcelButton = document.getElementById('export-excel');
-        const importJsonButton = document.getElementById('import-json');
-        const importExcelButton = document.getElementById('import-excel');
-        const clearButton = document.getElementById('clear-data');
-        const importSection = document.getElementById('import-section');
-        const fileInput = document.getElementById('file-input');
-        const confirmImport = document.getElementById('confirm-import');
-        const notification = document.getElementById('notification');
-        const productList = document.getElementById('product-list');
+        const exportJsonButton = document.getElementById极
         
         // Set current date as default
         document.getElementById('order-date').valueAsDate = new Date();
@@ -634,9 +575,7 @@
         
         // Show notification
         function showNotification(message, isError = false) {
-            notification.textContent = message;
-            notification.style.background = isError ? 'var(--danger)' : 'var(--success)';
-            notification.classList.add('show');
+            notification.text极
             
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -663,7 +602,7 @@
         // Render product list
         function renderProductList() {
             productList.innerHTML = '';
-            products.forEach((product, index) {
+            products.forEach((product, index) => {
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
@@ -711,7 +650,7 @@
             renderProductList();
             productForm.reset();
             showNotification('Product added successfully!');
-        }
+        });
         
         // Update price when product is selected
         productSelect.addEventListener('change', function() {
@@ -749,7 +688,7 @@
             document.getElementById('quantity').value = '';
             document.getElementById('price').value = '';
             document.getElementById('status').selectedIndex = 0;
-            document.getElementById('order-date').valueAsDate = new Date();
+            document.getElementById('order-date').valueAs极
             
             showNotification('Order added successfully!');
             
@@ -761,16 +700,14 @@
         });
         
         // Save orders to localStorage
-        function saveOrders() {
-            localStorage.setItem('salesOrders', JSON.stringify(orders));
-        }
+       极
         
         // Render orders in table
         function renderOrders() {
             ordersTable.innerHTML = '';
             
             if (orders.length === 0) {
-                ordersTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">No orders yet</td></tr>';
+                ordersTable.innerHTML = '<极
                 return;
             }
             
@@ -789,8 +726,7 @@
                     <td><span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></td>
                     <td class="actions">
                         <button class="btn-edit" data-id="${order.id}">Edit</button>
-                        <button class="btn-delete" data-id="${order.id}">Delete</button>
-                    </td>
+                        <button class极
                 `;
                 ordersTable.appendChild(tr);
             });
@@ -849,7 +785,7 @@
                 
                 // Switch to add order tab
                 tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
+                tabContents.forEach(c =>极
                 document.querySelector('[data-tab="add-order"]').classList.add('active');
                 document.getElementById('add-order-tab').classList.add('active');
                 
@@ -866,8 +802,7 @@
             // Calculate received revenue (only from paid orders)
             const received = orders
                 .filter(order => order.status === 'Paid')
-                .reduce((sum, order) => sum + order.total, 0);
-            receivedRevenue.textContent = formatCurrency(received);
+                .reduce极
             
             // Total orders
             totalOrders.textContent = orders.length;
@@ -917,17 +852,13 @@
                        (orderDate.getMonth() + 1) == month;
             });
             
-            if (monthlyOrders.length === 0) {
-                monthlyReport.innerHTML = `<p>No orders found for ${new Date(year, month-1).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>`;
-                return;
-            }
+            if (month极
             
             const revenue = monthlyOrders.reduce((sum, order) => sum + order.total, 0);
             const received = monthlyOrders
                 .filter(order => order.status === 'Paid')
                 .reduce((sum, order) => sum + order.total, 0);
-            const totalUnits = monthlyOrders.reduce((sum, order) => sum + order.quantity, 0);
-            const productSales = {};
+            const totalUnits = monthlyOrders.reduce((sum,极
             
             monthlyOrders.forEach(order => {
                 if (productSales[order.product]) {
@@ -948,21 +879,7 @@
                         <div class="value">${formatCurrency(revenue)}</div>
                     </div>
                     <div class="report-card">
-                        <h4>Received Revenue</h4>
-                        <div class="value">${formatCurrency(received)}</div>
-                    </div>
-                    <div class="report-card">
-                        <h4>Number of Orders</h4>
-                        <div class="value">${monthlyOrders.length}</div>
-                    </div>
-                    <div class="report-card">
-                        <h4>Total Units Sold</h4>
-                        <div class="value">${totalUnits}</div>
-                    </div>
-                    <div class="report-card">
-                        <h4>Average Order Value</h4>
-                        <div class="value">${formatCurrency(revenue / monthlyOrders.length)}</div>
-                    </div>
+                        <h4>Received Revenue</极
                 </div>
                 
                 <h3>Product Sales for ${new Date(year, month-1).toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
@@ -984,8 +901,7 @@
                     <tr>
                         <td>${product}</td>
                         <td>${productSales[product].quantity}</td>
-                        <td>${formatCurrency(productSales[product].revenue)}</td>
-                        <td>${percentage}%</td>
+                        <td>${formatCurrency(productSales[product].revenue极
                     </tr>
                 `;
             }
@@ -1025,7 +941,7 @@
         exportExcelButton.addEventListener('click', function() {
             // Prepare order data for Excel
             const orderData = orders.map(order => ({
-                Date: new Date(order.date).toLocaleDateString('en-GB'), // Use DD/MM/YYYY format
+                Date: new Date(order.date).toLocaleDateString(),
                 Customer: order.customer,
                 Product: order.product,
                 Quantity: order.quantity,
@@ -1045,8 +961,7 @@
             const productWs = XLSX.utils.json_to_sheet(products);
             XLSX.utils.book_append_sheet(wb, productWs, "Products");
             
-            // Export to file
-            XLSX.writeFile(wb, "boochify-sales-data.xlsx");
+            // Export to极
             
             showNotification('Data exported as Excel successfully!');
         });
@@ -1088,40 +1003,36 @@
                     if (dateParts.length === 3) {
                         // Check if it's DD/MM/YYYY format (day > 12)
                         if (parseInt(dateParts[0]) > 12 && parseInt(dateParts[1]) <= 12) {
-                            const day = dateParts[0].padStart(2, '0');
-                            const month = dateParts[1].padStart(2, '0');
-                            const year = dateParts[2];
-                            return `${year}-${month}-${day}`;
+                            const parsedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+                            if (!isNaN(parsedDate.getTime())) {
+                                return parsedDate.toISOString().split('T')[0];
+                            }
                         }
                         
                         // Try MM/DD/YYYY format (month > 12)
                         if (parseInt(dateParts[1]) > 12 && parseInt(dateParts[0]) <= 12) {
-                            const day = dateParts[1].padStart(2, '0');
-                            const month = dateParts[0].padStart(2, '0');
-                            const year = dateParts[2];
-                            return `${year}-${month}-${day}`;
+                            const parsedDate = new Date(`${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`);
+                            if (!isNaN(parsedDate.getTime())) {
+                                return parsedDate.toISOString().split('T')[0];
+                            }
                         }
                         
                         // Try as DD/MM/YYYY (most common format)
-                        if (parseInt(dateParts[0]) <= 31 && parseInt(dateParts[1]) <= 12) {
-                            const day = dateParts[0].padStart(2, '0');
-                            const month = dateParts[1].padStart(2, '0');
-                            const year = dateParts[2];
-                            return `${year}-${month}-${day}`;
+                        const parsedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+                        if (!isNaN(parsedDate.getTime())) {
+                            return parsedDate.toISOString().split('T')[0];
                         }
                         
                         // Try as MM/DD/YYYY
-                        if (parseInt(dateParts[0]) <= 12 && parseInt(dateParts[1]) <= 31) {
-                            const day = dateParts[1].padStart(2, '0');
-                            const month = dateParts[0].padStart(2, '0');
-                            const year = dateParts[2];
-                            return `${year}-${month}-${day}`;
+                        const parsedDate2 = new Date(`${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`);
+                        if (!isNaN(parsedDate2.getTime())) {
+                            return parsedDate2.toISOString().split('T')[0];
                         }
                     }
                     
                     // Try to parse as ISO date
                     const isoDate = new Date(excelDate);
-                    if (!isNaN(isoDate.getTime())) {
+                    if (!isNaN(iso极
                         return isoDate.toISOString().split('T')[0];
                     }
                 }
@@ -1181,12 +1092,12 @@
                     } else {
                         // Excel import
                         const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
+                        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
                         
                         // Get orders
                         if (workbook.SheetNames.includes("Orders")) {
                             const ordersSheet = workbook.Sheets["Orders"];
-                            const orderData = XLSX.utils.sheet_to_json(ordersSheet);
+                            const orderData = XLSX.utils极
                             
                             const importedOrders = orderData.map(item => {
                                 // Parse the date using our improved function
@@ -1199,7 +1110,7 @@
                                     product: item.Product,
                                     quantity: parseInt(item.Quantity) || 0,
                                     price: parseInt(item['Unit Price']) || 0,
-                                    total: parseInt(item.Total) || (parseInt(item.Quantity) || 0) * (parseInt(item['Unit Price']) || 0),
+                                    total: parseInt(item.Total) || 0,
                                     status: item.Status || 'Pending'
                                 };
                             });
@@ -1250,7 +1161,7 @@
         
         // Clear all data
         clearButton.addEventListener('click', function() {
-            if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
+            if (confirm('极
                 orders = [];
                 products = [
                     { name: "Original Kombucha", price: 25000 },
