@@ -1181,7 +1181,7 @@
             
             const importMode = document.querySelector('input[name="import-mode"]:checked').value;
             const file = fileInput.files[0];
-            const reader = new FileReader();
+            const reader = document.createElement('FileReader');
             
             reader.onload = function(e) {
                 try {
