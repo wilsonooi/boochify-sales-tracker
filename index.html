@@ -437,8 +437,8 @@
             <form id="order-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="order-date">Date (DD/MM/YYYY)</label>
-                        <input type="text" id="order-date" placeholder="DD/MM/YYYY" required pattern="\d{2}/\d{2}/\d{4}">
+                        <label for="order-date">Date</label>
+                        <input type="date" id="order-date" required>
                     </div>
                     <div class="form-group">
                         <label for="customer-name">Customer Name</label>
@@ -594,10 +594,8 @@
         const notification = document.getElementById('notification');
         const productList = document.getElementById('product-list');
         
-        // Set current date as default in DD/MM/YYYY format
-        const today = new Date();
-        const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-        document.getElementById('order-date').value = formattedToday;
+        // Set current date as default
+        document.getElementById('order-date').valueAsDate = new Date();
         
         // Tab switching with auto-refresh for reports
         tabs.forEach(tab => {
@@ -713,7 +711,7 @@
             renderProductList();
             productForm.reset();
             showNotification('Product added successfully!');
-        });
+        }
         
         // Update price when product is selected
         productSelect.addEventListener('change', function() {
@@ -723,26 +721,13 @@
             }
         });
         
-        // Validate DD/MM/YYYY date format
-        function isValidDate(dateString) {
-            const pattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-            if (!pattern.test(dateString)) return false;
-            
-            const parts = dateString.split('/');
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10);
-            const year = parseInt(parts[2], 10);
-            
-            if (month < 1 || month > 12) return false;
-            
-            const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            
-            // Adjust for leap years
-            if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) {
-                monthLength[1] = 29;
-            }
-            
-            return day > 0 && day <= monthLength[month - 1];
+        // Convert YYYY-MM-DD to DD/MM/YYYY format
+        function formatDateToDDMMYYYY(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
         }
         
         // Convert DD/MM/YYYY to YYYY-MM-DD for sorting and calculations
@@ -755,16 +740,9 @@
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const dateValue = document.getElementById('order-date').value;
-            
-            if (!isValidDate(dateValue)) {
-                showNotification('Please enter a valid date in DD/MM/YYYY format', true);
-                return;
-            }
-            
             const order = {
                 id: Date.now(), // unique ID
-                date: dateValue, // Store as DD/MM/YYYY
+                date: formatDateToDDMMYYYY(document.getElementById('order-date').value), // Store as DD/MM/YYYY
                 customer: document.getElementById('customer-name').value,
                 product: document.getElementById('product-select').value,
                 quantity: parseInt(document.getElementById('quantity').value),
@@ -786,7 +764,7 @@
             document.getElementById('quantity').value = '';
             document.getElementById('price').value = '';
             document.getElementById('status').selectedIndex = 0;
-            document.getElementById('order-date').value = formattedToday;
+            document.getElementById('order-date').valueAsDate = new Date();
             
             showNotification('Order added successfully!');
             
@@ -867,7 +845,11 @@
         function editOrder(id) {
             const order = orders.find(order => order.id === id);
             if (order) {
-                document.getElementById('order-date').value = order.date;
+                // Convert DD/MM/YYYY to YYYY-MM-DD for the date input
+                const dateParts = order.date.split('/');
+                const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+                document.getElementById('order-date').value = formattedDate;
+                
                 document.getElementById('customer-name').value = order.customer;
                 
                 // Select the product in dropdown
@@ -1111,9 +1093,7 @@
             try {
                 // If it's already a string in DD/MM/YYYY format
                 if (typeof excelDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(excelDate)) {
-                    if (isValidDate(excelDate)) {
-                        return excelDate;
-                    }
+                    return excelDate;
                 }
                 
                 // If it's a number (Excel serial date)
@@ -1171,10 +1151,7 @@
                             day = day.padStart(2, '0');
                             month = month.padStart(2, '0');
                             
-                            const formattedDate = `${day}/${month}/${year}`;
-                            if (isValidDate(formattedDate)) {
-                                return formattedDate;
-                            }
+                            return `${day}/${month}/${year}`;
                         }
                     }
                 }
