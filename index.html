@@ -663,7 +663,7 @@
         // Render product list
         function renderProductList() {
             productList.innerHTML = '';
-            products.forEach((product, index) => {
+            products.forEach((product, index) {
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
@@ -711,7 +711,7 @@
             renderProductList();
             productForm.reset();
             showNotification('Product added successfully!');
-        });
+        }
         
         // Update price when product is selected
         productSelect.addEventListener('change', function() {
@@ -1025,7 +1025,7 @@
         exportExcelButton.addEventListener('click', function() {
             // Prepare order data for Excel
             const orderData = orders.map(order => ({
-                Date: new Date(order.date).toLocaleDateString(),
+                Date: new Date(order.date).toLocaleDateString('en-GB'), // Use DD/MM/YYYY format
                 Customer: order.customer,
                 Product: order.product,
                 Quantity: order.quantity,
@@ -1088,30 +1088,34 @@
                     if (dateParts.length === 3) {
                         // Check if it's DD/MM/YYYY format (day > 12)
                         if (parseInt(dateParts[0]) > 12 && parseInt(dateParts[1]) <= 12) {
-                            const parsedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
-                            if (!isNaN(parsedDate.getTime())) {
-                                return parsedDate.toISOString().split('T')[0];
-                            }
+                            const day = dateParts[0].padStart(2, '0');
+                            const month = dateParts[1].padStart(2, '0');
+                            const year = dateParts[2];
+                            return `${year}-${month}-${day}`;
                         }
                         
                         // Try MM/DD/YYYY format (month > 12)
                         if (parseInt(dateParts[1]) > 12 && parseInt(dateParts[0]) <= 12) {
-                            const parsedDate = new Date(`${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`);
-                            if (!isNaN(parsedDate.getTime())) {
-                                return parsedDate.toISOString().split('T')[0];
-                            }
+                            const day = dateParts[1].padStart(2, '0');
+                            const month = dateParts[0].padStart(2, '0');
+                            const year = dateParts[2];
+                            return `${year}-${month}-${day}`;
                         }
                         
                         // Try as DD/MM/YYYY (most common format)
-                        const parsedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
-                        if (!isNaN(parsedDate.getTime())) {
-                            return parsedDate.toISOString().split('T')[0];
+                        if (parseInt(dateParts[0]) <= 31 && parseInt(dateParts[1]) <= 12) {
+                            const day = dateParts[0].padStart(2, '0');
+                            const month = dateParts[1].padStart(2, '0');
+                            const year = dateParts[2];
+                            return `${year}-${month}-${day}`;
                         }
                         
                         // Try as MM/DD/YYYY
-                        const parsedDate2 = new Date(`${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`);
-                        if (!isNaN(parsedDate2.getTime())) {
-                            return parsedDate2.toISOString().split('T')[0];
+                        if (parseInt(dateParts[0]) <= 12 && parseInt(dateParts[1]) <= 31) {
+                            const day = dateParts[1].padStart(2, '0');
+                            const month = dateParts[0].padStart(2, '0');
+                            const year = dateParts[2];
+                            return `${year}-${month}-${day}`;
                         }
                     }
                     
@@ -1177,12 +1181,12 @@
                     } else {
                         // Excel import
                         const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+                        const workbook = XLSX.read(data, { type: 'array' });
                         
                         // Get orders
                         if (workbook.SheetNames.includes("Orders")) {
                             const ordersSheet = workbook.Sheets["Orders"];
-                            const orderData = XLSX.utils.sheet_to_json(ordersSheet, { raw: false });
+                            const orderData = XLSX.utils.sheet_to_json(ordersSheet);
                             
                             const importedOrders = orderData.map(item => {
                                 // Parse the date using our improved function
@@ -1195,7 +1199,7 @@
                                     product: item.Product,
                                     quantity: parseInt(item.Quantity) || 0,
                                     price: parseInt(item['Unit Price']) || 0,
-                                    total: parseInt(item.Total) || 0,
+                                    total: parseInt(item.Total) || (parseInt(item.Quantity) || 0) * (parseInt(item['Unit Price']) || 0),
                                     status: item.Status || 'Pending'
                                 };
                             });
