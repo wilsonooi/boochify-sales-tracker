@@ -1290,19 +1290,10 @@
         clearButton.addEventListener('click', function() {
             if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
                 orders = [];
-                products = [
-                    { name: "Original Kombucha", price: 25000 },
-                    { name: "Berry Blast Kombucha", price: 30000 },
-                    { name: "Ginger Lemon Kombucha", price: 28000 },
-                    { name: "Mango Tango Kombucha", price: 32000 }
-                ];
                 saveOrders();
-                saveProducts();
                 renderOrders();
-                populateProductDropdown();
-                renderProductList();
                 updateDashboard();
-                showNotification('All data has been cleared.');
+                showNotification('All data has been cleared. Products were preserved.');
             }
         });
         
