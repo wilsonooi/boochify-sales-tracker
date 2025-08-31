@@ -663,7 +663,7 @@
         // Render product list
         function renderProductList() {
             productList.innerHTML = '';
-            products.forEach((product, index) {
+            products.forEach((product, index) => {
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
@@ -983,7 +983,7 @@
                         <h4>Total Units Sold</h4>
                         <div class="value">${totalUnits}</div>
                     </div>
-                    <div class="report-card">
+                    <div class report-card">
                         <h4>Average Order Value</h4>
                         <div class="value">${formatCurrency(revenue / monthlyOrders.length)}</div>
                     </div>
@@ -1181,7 +1181,7 @@
             
             const importMode = document.querySelector('input[name="import-mode"]:checked').value;
             const file = fileInput.files[0];
-            const reader = document.createElement('FileReader');
+            const reader = new FileReader(); // Fixed this line
             
             reader.onload = function(e) {
                 try {
