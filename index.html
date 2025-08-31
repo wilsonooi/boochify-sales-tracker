@@ -663,7 +663,7 @@
         // Render product list
         function renderProductList() {
             productList.innerHTML = '';
-            products.forEach((product, index) => {
+            products.forEach((product, index) {
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
@@ -711,7 +711,7 @@
             renderProductList();
             productForm.reset();
             showNotification('Product added successfully!');
-        }
+        });
         
         // Update price when product is selected
         productSelect.addEventListener('change', function() {
