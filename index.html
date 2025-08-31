@@ -24,7 +24,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
@@ -149,28 +149,25 @@
         
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 5px;
             font-size: 1rem;
-            -webkit-appearance: none;
-            appearance: none;
         }
         
         button {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px 25px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
             transition: background-color 0.3s;
-            -webkit-tap-highlight-color: transparent;
         }
         
-        button:hover, button:active {
+        button:hover {
             background-color: var(--secondary);
         }
         
@@ -231,14 +228,10 @@
         
         .btn-edit {
             background-color: var(--warning);
-            padding: 8px 15px;
-            font-size: 0.9rem;
         }
         
         .btn-delete {
             background-color: var(--danger);
-            padding: 8px 15px;
-            font-size: 0.9rem;
         }
         
         .data-management {
@@ -266,6 +259,13 @@
         
         .btn-clear {
             background-color: var(--danger);
+        }
+        
+        .import-options {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
         }
         
         .footer {
@@ -350,7 +350,7 @@
         
         @media (max-width: 768px) {
             .dashboard {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
             
             .tabs {
@@ -368,32 +368,6 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .card {
-                padding: 15px;
-            }
-            
-            .card .value {
-                font-size: 1.5rem;
-            }
-        }
-        
-        /* iOS-specific fixes */
-        input[type="date"] {
-            min-height: 44px; /* Minimum touch target size */
-        }
-        
-        select {
-            min-height: 44px; /* Minimum touch target size */
-            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 16px;
-            padding-right: 40px;
         }
     </style>
 </head>
@@ -500,7 +474,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" id="add-order-button">Add Order</button>
+                <button type="submit">Add Order</button>
             </form>
         </div>
 
@@ -518,7 +492,7 @@
                             <input type="number" id="new-product-price" step="100" min="0" required>
                         </div>
                     </div>
-                    <button type="submit" id="add-product-button">Add Product</button>
+                    <button type="submit">Add Product</button>
                 </form>
 
                 <h3 style="margin-top: 20px;">Product List</h3>
@@ -550,14 +524,26 @@
                     <button class="btn-export" id="export-excel">Export as Excel</button>
                     <button class="btn-import" id="import-json">Import JSON</button>
                     <button class="btn-import" id="import-excel">Import Excel</button>
-                    <button class="btn-clear" id="clear-data">Clear Order Data</button>
+                    <button class="btn-clear" id="clear-data">Clear All Data</button>
+                </div>
+
+                <div class="import-options">
+                    <h3>Import Options</h3>
+                    <div>
+                        <input type="radio" id="import-append" name="import-mode" value="append" checked>
+                        <label for="import-append">Append to existing data</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="import-replace" name="import-mode" value="replace">
+                        <label for="import-replace">Replace all data</label>
+                    </div>
                 </div>
 
                 <div id="import-section" style="display: none; margin-top: 20px;">
                     <input type="file" id="file-input" accept=".json,.xlsx">
                     <button id="confirm-import" style="margin-top: 10px;">Confirm Import</button>
                     <p style="margin-top: 10px; font-size: 0.9rem; color: var(--danger);">
-                        Warning: Importing will replace all current order data.
+                        Warning: Importing will affect your data based on the selected mode.
                     </p>
                 </div>
             </div>
@@ -607,40 +593,9 @@
         const confirmImport = document.getElementById('confirm-import');
         const notification = document.getElementById('notification');
         const productList = document.getElementById('product-list');
-        const addOrderButton = document.getElementById('add-order-button');
-        const addProductButton = document.getElementById('add-product-button');
         
         // Set current date as default
         document.getElementById('order-date').valueAsDate = new Date();
-        
-        // iOS compatibility - prevent default form submission
-        function setupIOSCompatibility() {
-            // Add touchstart event listeners for better iOS response
-            document.querySelectorAll('button').forEach(button => {
-                button.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.8';
-                });
-                
-                button.addEventListener('touchend', function() {
-                    this.style.opacity = '1';
-                });
-            });
-            
-            // Prevent default form submission
-            if (orderForm) {
-                orderForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    addNewOrder();
-                });
-            }
-            
-            if (productForm) {
-                productForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    addNewProduct();
-                });
-            }
-        }
         
         // Tab switching with auto-refresh for reports
         tabs.forEach(tab => {
@@ -708,7 +663,7 @@
         // Render product list
         function renderProductList() {
             productList.innerHTML = '';
-            products.forEach((product, index) => {
+            products.forEach((product, index) {
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
@@ -742,7 +697,9 @@
         }
         
         // Add new product
-        function addNewProduct() {
+        productForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             const newProduct = {
                 name: document.getElementById('new-product-name').value,
                 price: parseInt(document.getElementById('new-product-price').value)
@@ -754,7 +711,7 @@
             renderProductList();
             productForm.reset();
             showNotification('Product added successfully!');
-        }
+        });
         
         // Update price when product is selected
         productSelect.addEventListener('change', function() {
@@ -765,7 +722,9 @@
         });
         
         // Add new order
-        function addNewOrder() {
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             const order = {
                 id: Date.now(), // unique ID
                 date: document.getElementById('order-date').value,
@@ -799,7 +758,7 @@
             tabContents.forEach(c => c.classList.remove('active'));
             document.querySelector('[data-tab="orders"]').classList.add('active');
             document.getElementById('orders-tab').classList.add('active');
-        }
+        });
         
         // Save orders to localStorage
         function saveOrders() {
@@ -1066,7 +1025,7 @@
         exportExcelButton.addEventListener('click', function() {
             // Prepare order data for Excel
             const orderData = orders.map(order => ({
-                Date: new Date(order.date).toLocaleDateString('en-GB'), // DD/MM/YYYY format
+                Date: new Date(order.date).toLocaleDateString(),
                 Customer: order.customer,
                 Product: order.product,
                 Quantity: order.quantity,
@@ -1178,6 +1137,7 @@
                 return;
             }
             
+            const importMode = document.querySelector('input[name="import-mode"]:checked').value;
             const file = fileInput.files[0];
             const reader = new FileReader();
             
@@ -1186,16 +1146,31 @@
                     if (importType === 'json') {
                         const importedData = JSON.parse(e.target.result);
                         
-                        if (importedData.orders && importedData.products) {
-                            if (confirm('This will replace all current order data. Continue?')) {
-                                orders = importedData.orders;
+                        if (importedData.orders) {
+                            if (importMode === 'replace') {
+                                // Replace all data
+                                if (confirm('This will replace ALL your current order data. Continue?')) {
+                                    orders = importedData.orders;
+                                    saveOrders();
+                                    renderOrders();
+                                    updateDashboard();
+                                    showNotification('Order data replaced successfully!');
+                                }
+                            } else {
+                                // Append to existing data
+                                const newOrders = importedData.orders.filter(newOrder => 
+                                    !orders.some(existingOrder => existingOrder.id === newOrder.id)
+                                );
+                                
+                                orders = [...orders, ...newOrders];
                                 saveOrders();
                                 renderOrders();
                                 updateDashboard();
-                                importSection.style.display = 'none';
-                                fileInput.value = '';
-                                showNotification('Order data imported successfully!');
+                                showNotification(`${newOrders.length} orders appended successfully!`);
                             }
+                            
+                            importSection.style.display = 'none';
+                            fileInput.value = '';
                         } else {
                             showNotification('Invalid JSON format.', true);
                         }
@@ -1209,7 +1184,7 @@
                             const ordersSheet = workbook.Sheets["Orders"];
                             const orderData = XLSX.utils.sheet_to_json(ordersSheet, { raw: false });
                             
-                            orders = orderData.map(item => {
+                            const importedOrders = orderData.map(item => {
                                 // Parse the date using our improved function
                                 const parsedDate = parseExcelDate(item.Date);
                                 
@@ -1224,16 +1199,38 @@
                                     status: item.Status || 'Pending'
                                 };
                             });
+                            
+                            if (importMode === 'replace') {
+                                // Replace all data
+                                if (confirm('This will replace ALL your current order data. Continue?')) {
+                                    orders = importedOrders;
+                                    saveOrders();
+                                    renderOrders();
+                                    updateDashboard();
+                                    showNotification('Order data replaced successfully!');
+                                }
+                            } else {
+                                // Append to existing data
+                                const newOrders = importedOrders.filter(newOrder => 
+                                    !orders.some(existingOrder => 
+                                        existingOrder.date === newOrder.date &&
+                                        existingOrder.customer === newOrder.customer &&
+                                        existingOrder.product === newOrder.product &&
+                                        existingOrder.quantity === newOrder.quantity &&
+                                        existingOrder.price === newOrder.price
+                                    )
+                                );
+                                
+                                orders = [...orders, ...newOrders];
+                                saveOrders();
+                                renderOrders();
+                                updateDashboard();
+                                showNotification(`${newOrders.length} orders appended successfully!`);
+                            }
                         }
                         
-                        if (confirm('This will replace all current order data. Continue?')) {
-                            saveOrders();
-                            renderOrders();
-                            updateDashboard();
-                            importSection.style.display = 'none';
-                            fileInput.value = '';
-                            showNotification('Order data imported successfully!');
-                        }
+                        importSection.style.display = 'none';
+                        fileInput.value = '';
                     }
                 } catch (error) {
                     showNotification('Error parsing file: ' + error.message, true);
@@ -1247,23 +1244,28 @@
             }
         });
         
-        // Clear only order data (preserve products)
+        // Clear all data
         clearButton.addEventListener('click', function() {
-            if (confirm('Are you sure you want to delete ALL ORDER DATA? This cannot be undone. Your product list will be preserved.')) {
+            if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
                 orders = [];
+                products = [
+                    { name: "Original Kombucha", price: 25000 },
+                    { name: "Berry Blast Kombucha", price: 30000 },
+                    { name: "Ginger Lemon Kombucha", price: 28000 },
+                    { name: "Mango Tango Kombucha", price: 32000 }
+                ];
                 saveOrders();
+                saveProducts();
                 renderOrders();
+                populateProductDropdown();
+                renderProductList();
                 updateDashboard();
-                showNotification('All order data has been cleared. Product data preserved.');
+                showNotification('All data has been cleared.');
             }
         });
         
         // Initialize the app
         function init() {
-            // Setup iOS compatibility
-            setupIOSCompatibility();
-            
-            // Initialize the app
             populateProductDropdown();
             renderProductList();
             renderOrders();
